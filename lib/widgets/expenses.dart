@@ -1,6 +1,6 @@
-import 'package:test_dart/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
 
+import 'package:test_dart/widgets/new_expense.dart';
 import 'package:test_dart/widgets/expenses_list/expenses_list.dart';
 import 'package:test_dart/models/expense.dart';
 
@@ -33,6 +33,7 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
+      useSafeArea: true,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
     );
   }
