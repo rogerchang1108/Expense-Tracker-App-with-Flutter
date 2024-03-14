@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
+import 'color_schemes.g.dart';
 
 import 'package:test_dart/widgets/expenses.dart';
-
-var kColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 96, 59, 181),
-);
-
-var kDarkColorScheme = ColorScheme.fromSeed(
-  brightness: Brightness.dark,
-  seedColor: const Color.fromARGB(255, 5, 99, 125),
-);
 
 void main() {
   runApp(
     MaterialApp(
       darkTheme: ThemeData.dark().copyWith(
-        colorScheme: kDarkColorScheme,
+        colorScheme: darkColorScheme,
         cardTheme: const CardTheme().copyWith(
-          color: kDarkColorScheme.secondaryContainer,
+          color: darkColorScheme.secondaryContainer,
           margin: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 8,
@@ -25,19 +17,19 @@ void main() {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: kDarkColorScheme.primaryContainer,
-            foregroundColor: kDarkColorScheme.onPrimaryContainer,
+            backgroundColor: darkColorScheme.primaryContainer,
+            foregroundColor: darkColorScheme.onPrimaryContainer,
           ),
         ),
       ),
       theme: ThemeData().copyWith(
-        colorScheme: kColorScheme,
+        colorScheme: lightColorScheme,
         appBarTheme: const AppBarTheme().copyWith(
-          backgroundColor: kColorScheme.onPrimaryContainer,
-          foregroundColor: kColorScheme.primaryContainer,
+          backgroundColor: lightColorScheme.onPrimaryContainer,
+          foregroundColor: lightColorScheme.primaryContainer,
         ),
         cardTheme: const CardTheme().copyWith(
-          color: kColorScheme.secondaryContainer,
+          color: lightColorScheme.secondaryContainer,
           margin: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 8,
@@ -45,13 +37,13 @@ void main() {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: kColorScheme.primaryContainer,
+            backgroundColor: lightColorScheme.primaryContainer,
           ),
         ),
         textTheme: ThemeData().textTheme.copyWith(
               titleLarge: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: kColorScheme.onSecondaryContainer,
+                color: lightColorScheme.onSecondaryContainer,
                 fontSize: 16,
               ),
             ),

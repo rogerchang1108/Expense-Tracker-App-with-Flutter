@@ -32,8 +32,8 @@ class _ExpensesState extends State<Expenses> {
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       isScrollControlled: true,
-      context: context,
       useSafeArea: true,
+      context: context,
       builder: (ctx) => NewExpense(onAddExpense: _addExpense),
     );
   }
@@ -66,8 +66,37 @@ class _ExpensesState extends State<Expenses> {
     );
   }
 
+  Map<Category, double> _countExpensesByCategory() {
+    final countMap = {
+      Category.food: 0.0,
+      Category.travel: 0.0,
+      Category.leisure: 0.0,
+      Category.work: 0.0,
+    };
+
+    for (final expense in _registeredExpenses) {
+      countMap[expense.category] = countMap[expense.category]! + expense.amount;
+    }
+
+    return countMap;
+  }
+  
+  Map<Category, double> _calculateBarHeights(Map<Category, double> countMap) {
+    final maxCount = countMap.values.fold(0.0, (prev, element) => element > prev ? element : prev);
+
+    final Map<Category, double> barHeights = {};
+    for (final category in countMap.keys) {
+      barHeights[category] = (countMap[category]! / maxCount) * 100;
+    }
+    return barHeights;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final themeColor = Theme.of(context).colorScheme.primary;
+    final countMap = _countExpensesByCategory();
+    final barHeights = _calculateBarHeights(countMap);
+
     Widget mainContent = const Center(
       child: Text('No expenses found. Start adding some!'),
     );
@@ -91,7 +120,38 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          const Text('The chart'),
+          const SizedBox(height: 10),
+          Card(
+            margin: const EdgeInsets.all(16),
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 150,
+                child: Row(
+                  children: [
+                    for (final category in countMap.keys)
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: 90,
+                              height: barHeights[category],
+                              color: themeColor,
+                            ),
+                            Icon(
+                              categoryIcons[category],
+                              color: themeColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: mainContent,
           ),
