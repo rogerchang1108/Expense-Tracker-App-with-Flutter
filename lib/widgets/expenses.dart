@@ -145,7 +145,13 @@ class _ExpensesState extends State<Expenses> {
                             Container(
                               width: MediaQuery.of(context).size.width / (countMap.length * 1.5),
                               height: barHeights[category],
-                              color: themeColor,
+                              decoration: BoxDecoration(
+                                color: themeColor,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  topRight: Radius.circular(10.0),
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 5),
                             Icon(
