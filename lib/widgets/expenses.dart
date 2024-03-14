@@ -114,6 +114,45 @@ class _ExpensesState extends State<Expenses> {
         onRemoveExpense: _removeExpense,
       );
     }
+    
+    Widget barChart = Card(
+      margin: const EdgeInsets.all(16),
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.2,
+          child: Row(
+            children: [
+              for (final category in countMap.keys)
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width / (countMap.length * 1.5),
+                        height: barHeights[category],
+                        decoration: BoxDecoration(
+                          color: themeColor,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Icon(
+                        categoryIcons[category],
+                        color: themeColor,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -128,44 +167,7 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: [
           const SizedBox(height: 10),
-          Card(
-            margin: const EdgeInsets.all(16),
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-                child: Row(
-                  children: [
-                    for (final category in countMap.keys)
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / (countMap.length * 1.5),
-                              height: barHeights[category],
-                              decoration: BoxDecoration(
-                                color: themeColor,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Icon(
-                              categoryIcons[category],
-                              color: themeColor,
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          barChart,
           Expanded(
             child: mainContent,
           ),
