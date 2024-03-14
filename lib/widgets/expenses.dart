@@ -93,7 +93,12 @@ class _ExpensesState extends State<Expenses> {
 
     final Map<Category, double> barHeights = {};
     for (final category in countMap.keys) {
-      barHeights[category] = (countMap[category]! / maxCount) * availableHeight;
+      double finalHeight = (countMap[category]! / maxCount) * availableHeight;
+      if (finalHeight != 0) {
+        barHeights[category] = finalHeight < 1 ? 1 : finalHeight;
+      } else {
+        barHeights[category] = 0;
+      }
     }
     return barHeights;
   }
