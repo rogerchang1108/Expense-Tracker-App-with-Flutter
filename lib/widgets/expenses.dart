@@ -16,14 +16,14 @@ class Expenses extends StatefulWidget {
 class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
     Expense(
-      title: 'Flutter Course',
+      title: 'Guitar Course',
       amount: 19.99,
       date: DateTime.now(),
       category: Category.work,
     ),
     Expense(
-      title: 'Cinema',
-      amount: 15.69,
+      title: 'Dune: Part Two',
+      amount: 9.99,
       date: DateTime.now(),
       category: Category.leisure,
     ),
@@ -68,25 +68,32 @@ class _ExpensesState extends State<Expenses> {
 
   Map<Category, double> _countExpensesByCategory() {
     final countMap = {
-      Category.food: 0.0,
-      Category.travel: 0.0,
-      Category.leisure: 0.0,
-      Category.work: 0.0,
+      for (var category in Category.values) category: 0.0,
     };
 
     for (final expense in _registeredExpenses) {
       countMap[expense.category] = countMap[expense.category]! + expense.amount;
     }
 
-    return countMap;
+    final sortedEntries = countMap.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+
+    final sortedMap = Map.fromEntries(sortedEntries);
+
+    return sortedMap;
   }
   
   Map<Category, double> _calculateBarHeights(Map<Category, double> countMap) {
     final maxCount = countMap.values.fold(0.0, (prev, element) => element > prev ? element : prev);
+    
+    final double availableHeight = MediaQuery.of(context).size.height * 0.2 - 41;
+    if (availableHeight <= 0) {
+      return {};
+    }
 
     final Map<Category, double> barHeights = {};
     for (final category in countMap.keys) {
-      barHeights[category] = (countMap[category]! / maxCount) * 100;
+      barHeights[category] = (countMap[category]! / maxCount) * availableHeight;
     }
     return barHeights;
   }
@@ -127,7 +134,7 @@ class _ExpensesState extends State<Expenses> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
-                height: 150,
+                height: MediaQuery.of(context).size.height * 0.2,
                 child: Row(
                   children: [
                     for (final category in countMap.keys)
@@ -136,10 +143,11 @@ class _ExpensesState extends State<Expenses> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Container(
-                              width: 90,
+                              width: MediaQuery.of(context).size.width / (countMap.length * 1.5),
                               height: barHeights[category],
                               color: themeColor,
                             ),
+                            const SizedBox(height: 5),
                             Icon(
                               categoryIcons[category],
                               color: themeColor,
