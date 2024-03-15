@@ -67,7 +67,7 @@ class _ExpensesState extends State<Expenses> {
   }
 
   Map<Category, double> _countExpensesByCategory() {
-    final countMap = {
+    final Map<Category, double> countMap = {
       for (var category in Category.values) category: 0.0,
     };
 
@@ -83,42 +83,32 @@ class _ExpensesState extends State<Expenses> {
     return sortedMap;
   }
   
-  Map<Category, double> _calculateBarHeights(Map<Category, double> countMap) {
-    final maxCount = countMap.values.fold(0.0, (prev, element) => element > prev ? element : prev);
+  Map<Category, double> _calculateBarHeights(Map<Category, double> sortedMap) {
+    final Map<Category, double> barHeights = {
+      for (var category in sortedMap.keys) category: 0.0,
+    };
     
     final double availableHeight = MediaQuery.of(context).size.height * 0.2 - 41;
-    if (availableHeight <= 0) {
-      return {};
-    }
+    
+    if (availableHeight > 0) {
+      final maxCount = sortedMap.values.fold(0.0, (prev, element) => element > prev ? element : prev);
 
-    final Map<Category, double> barHeights = {};
-    for (final category in countMap.keys) {
-      double finalHeight = (countMap[category]! / maxCount) * availableHeight;
-      if (finalHeight != 0) {
-        barHeights[category] = finalHeight < 1 ? 1 : finalHeight;
-      } else {
-        barHeights[category] = 0;
+      for (final category in sortedMap.keys) {
+        double finalHeight = (sortedMap[category]! / maxCount) * availableHeight;
+        if (finalHeight != 0) {
+          barHeights[category] = finalHeight < 1 ? 1 : finalHeight;
+        } else {
+          barHeights[category] = 0;
+        }
       }
     }
+
     return barHeights;
   }
 
   @override
   Widget build(BuildContext context) {
     final themeColor = Theme.of(context).colorScheme.primary;
-    final countMap = _countExpensesByCategory();
-    final barHeights = _calculateBarHeights(countMap);
-
-    Widget mainContent = const Center(
-      child: Text('No expenses found. Start adding some!'),
-    );
-
-    if (_registeredExpenses.isNotEmpty) {
-      mainContent = ExpensesList(
-        expenses: _registeredExpenses,
-        onRemoveExpense: _removeExpense,
-      );
-    }
     
     Widget barChart = Card(
       margin: const EdgeInsets.all(16),
@@ -129,23 +119,11 @@ class _ExpensesState extends State<Expenses> {
           height: MediaQuery.of(context).size.height * 0.2,
           child: Row(
             children: [
-              for (final category in countMap.keys)
+              for (final category in Category.values)
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / (countMap.length * 1.5),
-                        height: barHeights[category],
-                        decoration: BoxDecoration(
-                          color: themeColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            topRight: Radius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
                       Icon(
                         categoryIcons[category],
                         color: themeColor,
@@ -158,6 +136,59 @@ class _ExpensesState extends State<Expenses> {
         ),
       ),
     );
+
+    Widget mainContent = const Align(
+      alignment: Alignment.topCenter,
+      child: Text('No expenses found. Start adding some!'),
+    );
+
+    if (_registeredExpenses.isNotEmpty) {
+      final sortedMap = _countExpensesByCategory();
+      final barHeights = _calculateBarHeights(sortedMap);
+      barChart = Card(
+        margin: const EdgeInsets.all(16),
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Row(
+              children: [
+                for (final category in sortedMap.keys)
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width / (sortedMap.length * 1.5),
+                          height: barHeights[category],
+                          decoration: BoxDecoration(
+                            color: themeColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              topRight: Radius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Icon(
+                          categoryIcons[category],
+                          color: themeColor,
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onRemoveExpense: _removeExpense,
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
