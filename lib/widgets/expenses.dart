@@ -159,14 +159,16 @@ class _ExpensesState extends State<Expenses> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width / (sortedMap.length * 1.5),
                           height: barHeights[category],
-                          decoration: BoxDecoration(
-                            color: themeColor,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              topRight: Radius.circular(10.0),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: themeColor,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
                             ),
                           ),
                         ),
