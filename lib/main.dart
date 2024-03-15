@@ -41,12 +41,12 @@ void main() {
           ),
         ),
         textTheme: ThemeData().textTheme.copyWith(
-              titleLarge: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: lightColorScheme.onSecondaryContainer,
-                fontSize: 16,
-              ),
-            ),
+          titleLarge: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: lightColorScheme.onSecondaryContainer,
+            fontSize: 16,
+          ),
+        ),
       ),
       // themeMode: ThemeMode.system, // default
       home: const Expenses(),
