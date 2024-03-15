@@ -24,6 +24,12 @@ In this project, using Flutter and Dart to develop an expense tracker app. Users
 
     ![component](img/5.png)
 
+6. In window view, the chart’s size changes in order to fit the window when user re-size it.
+
+    ![component](img/6.png)
+
+    ![component](img/7.png)
+
 ## Resources
 
 A few introductory tutorials:
