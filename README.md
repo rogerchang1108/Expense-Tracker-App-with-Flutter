@@ -2,6 +2,12 @@
 
 In this project, using Flutter and Dart to develop an expense tracker app. Users can add expenses by inputting the title, amount, date, and category and delete expenses. Additionally, the app will display a chart showing the proportion of each category’s total amount in increasing order.
 
+There is an advanced version: 
+
+- [Expense Tracker App with Parallax Scrolling](https://github.com/rogerchang1108/Expense-Tracker-App-with-Parallax-Scrolling-with-Flutter). 
+
+Check it out now.
+
 ## Features
 
 1. After entering values from the form, the **Chart** will display the difference in bar heights between each category, reflecting the proportion of each item's **Total Amount**.
